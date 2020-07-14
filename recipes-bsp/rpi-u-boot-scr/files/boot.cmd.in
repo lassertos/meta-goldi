@@ -1,0 +1,41 @@
+test -n "${BOOT_ORDER}" || setenv BOOT_ORDER "A B"
+test -n "${BOOT_A_LEFT}" || setenv BOOT_A_LEFT 3
+test -n "${BOOT_B_LEFT}" || setenv BOOT_B_LEFT 3
+
+setenv extra_bootargs
+setenv bootargs
+for BOOT_SLOT in "${BOOT_ORDER}"; do
+  if test "x${extra_bootargs}" != "x"; then
+    # skip remaining slots
+  elif test "x${BOOT_SLOT}" = "xA"; then
+    if test ${BOOT_A_LEFT} -gt 0; then
+      echo "Found valid slot A, ${BOOT_A_LEFT} attempts remaining"
+      setexpr BOOT_A_LEFT ${BOOT_A_LEFT} - 1
+      setenv load_kernel "fatload mmc 0:1 ${kernel_addr_r} uImage"
+      setenv extra_bootargs dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rauc.slot=A rootfstype=ext4 rootwait
+    fi
+  elif test "x${BOOT_SLOT}" = "xB"; then
+    if test ${BOOT_B_LEFT} -gt 0; then
+      echo "Found valid slot B, ${BOOT_B_LEFT} attempts remaining"
+      setexpr BOOT_B_LEFT ${BOOT_B_LEFT} - 1
+      setenv load_kernel "fatload mmc 0:1 ${kernel_addr_r} uImage"
+      setenv extra_bootargs dwc_otg.lpm_enable=0 root=/dev/mmcblk0p3 rauc.slot=B rootfstype=ext4 rootwait
+    fi
+  fi
+done
+
+if test -n "${extra_bootargs}"; then
+  saveenv
+else
+  echo "No valid slot found, resetting tries to 3"
+  setenv BOOT_A_LEFT 3
+  setenv BOOT_B_LEFT 3
+  saveenv
+  reset
+fi
+
+echo "starting"
+fdt addr ${fdt_addr} && fdt get value bootargs /chosen bootargs
+run load_kernel
+setenv bootargs "${bootargs} ${extra_bootargs}"
+bootm ${kernel_addr_r} - ${fdt_addr}
