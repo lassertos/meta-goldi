@@ -2,12 +2,6 @@ SUMMARY = "Provides a slot.raucs file for the sd-card image"
 HOMEPAGE = ""
 LICENSE = "MIT"
 
-#LIC_FILES_CHKSUM = "file://COPYING;md5=3da9cfbcb788c80a0384361b4de20420"
-
-SRC_URI = ""
-SRC_URI[md5sum] = ""
-SRC_URI[sha256sum] = ""
-
 S = "${WORKDIR}/${PN}-${PV}"
 
 RAUC_BUNDLE_BUILD = "${STARTTIME}"
@@ -35,7 +29,5 @@ python do_writeslotraucs() {
     slotraucs.close()
 }
 addtask writeslotraucs before do_install
-
-WKS_FILE = "sdimage-goldi.wks"
 
 FILES_${PN} += "/slot.raucs"
