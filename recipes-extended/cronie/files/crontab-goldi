@@ -1,1 +1,1 @@
-*/5 * * * * root /usr/bin/goldi-rauc-updater.sh > /home/root/updater-log
+0 0 * * * root /usr/bin/goldi-rauc-updater.sh > /etc/rauc/updater-log

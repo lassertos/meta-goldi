@@ -1,1 +1,0 @@
-system-info=/usr/lib/rauc/info-provider.sh

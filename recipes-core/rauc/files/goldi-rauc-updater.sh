@@ -1,8 +1,8 @@
 echo updater started at $(date)
 TIMESTAMP=$(stat -c %y update-info)
-wget -N http://192.168.179.24/updates/update-info
-NEW_VERSION=$(cat update-info | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
-NEW_BUILD=$(cat update-info | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+wget -O /etc/rauc/update-info http://192.168.179.24/updates/update-info
+NEW_VERSION=$(cat /etc/rauc/update-info | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+NEW_BUILD=$(cat /etc/rauc/update-info | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
 echo new version=$NEW_VERSION
 echo new build=$NEW_BUILD
 BOOTED_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.version' | sed 's/"//g')
@@ -22,9 +22,9 @@ then
 		shutdown -r 1
 	else
 		echo installing update
-		wget http://192.168.179.24/updates/update.raucb
-		rauc install /home/root/update.raucb
-		rm /home/root/update.raucb
+		wget -O /etc/rauc/update.raucb http://192.168.179.24/updates/update.raucb
+		rauc install /etc/rauc/update.raucb
+		rm /etc/rauc/update.raucb
 	fi
 else
 	echo no update needed
