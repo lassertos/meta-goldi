@@ -1,6 +1,6 @@
 inherit bundle
 
-RAUC_BUNDLE_COMPATIBLE = "RPI4"
+RAUC_BUNDLE_COMPATIBLE = "RPI3"
 RAUC_BUNDLE_SLOTS = "rootfs"
 RAUC_SLOT_rootfs = "core-image-minimal"
 RAUC_BUNDLE_BUILD = "${STARTTIME}"

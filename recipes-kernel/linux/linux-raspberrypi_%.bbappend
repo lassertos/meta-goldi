@@ -1,3 +1,5 @@
-KBUILD_DEFCONFIG_raspberrypi4 = ""
+SERIAL = "${@oe.utils.conditional("ENABLE_UART", "1", "console=serial0,115200", "", d)}"
+CMDLINE = "${SERIAL} rootfstype=ext4"
+KBUILD_DEFCONFIG_raspberrypi3-64 = ""
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 SRC_URI_append := " file://goldi_defconfig"
