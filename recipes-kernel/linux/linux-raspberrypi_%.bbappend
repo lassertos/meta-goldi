@@ -1,5 +1,15 @@
-SERIAL = "${@oe.utils.conditional("ENABLE_UART", "1", "console=serial0,115200", "", d)}"
-CMDLINE = "${SERIAL} rootfstype=ext4"
-KBUILD_DEFCONFIG_raspberrypi3-64 = ""
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
-SRC_URI_append := " file://goldi_defconfig"
+CMDLINE_remove = "root=/dev/mmcblk0p2"
+
+do_configure_prepend() {
+    config_setup
+
+    mv -f ${B}/.config ${B}/.config.patched
+    CONF_SED_SCRIPT=""
+    
+    kernel_configure_variable SQUASHFS y
+
+    # Keep this the last line
+    # Remove all modified configs and add the rest to .config
+    sed -e "${CONF_SED_SCRIPT}" < '${B}/.config.patched' >> '${B}/.config'
+    rm -f ${B}/.config.patched
+}

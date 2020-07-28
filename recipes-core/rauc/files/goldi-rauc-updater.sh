@@ -1,4 +1,6 @@
 echo updater started at $(date)
+
+#download update-info and collect necessary information
 wget -O /etc/rauc/update-info http://192.168.179.24/updates/update-info
 NEW_VERSION=$(cat /etc/rauc/update-info | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
 NEW_BUILD=$(cat /etc/rauc/update-info | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
@@ -7,6 +9,8 @@ BOOTED_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | 
 INACTIVE_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.version' | sed 's/"//g')
 INACTIVE_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.build' | sed 's/"//g')
 BOOTLOADER_UPDATE=$(cat /etc/rauc/update-info | grep ^bootloader-update | cut -d: -f2)
+
+#output for log
 echo new version=$NEW_VERSION
 echo new build=$NEW_BUILD
 echo booted version=$BOOTED_VERSION
@@ -14,8 +18,11 @@ echo booted build=$BOOTED_BUILD
 echo inactive version=$INACTIVE_VERSION
 echo inactive build=$INACTIVE_BUILD
 echo bootloader updated=$BOOTLOADER_UPDATE
+
+#check if update is already installed on booted partition
 if [ "$NEW_VERSION" != "$BOOTED_VERSION" ] || [ "$NEW_BUILD" != "$BOOTED_BUILD" ]
 then
+	#check if update is already installed on inactive partition
 	if [ "$NEW_VERSION" = "$INACTIVE_VERSION" ] && [ "$NEW_BUILD" = "$INACTIVE_BUILD" ]
 	then
 		echo changing boot order

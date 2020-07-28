@@ -1,2 +1,2 @@
 #!/bin/sh
-shutdown -r 1
+sync -d /boot/uboot.env && shutdown -r 1
