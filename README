@@ -5,15 +5,15 @@ Please see the corresponding sections below for details.
 Dependencies
 ============
 
-  URI: <first dependency>
-  branch: <branch name>
+  URI: git://git.yoctoproject.org/meta-raspberrypi
+  branch: master
 
-  URI: <second dependency>
-  branch: <branch name>
+  URI: https://github.com/rauc/meta-rauc.git
+  branch: master
 
-  .
-  .
-  .
+  URI: https://github.com/openembedded/meta-openembedded.git
+  layers: meta-oe
+  branch: master
 
 Patches
 =======
