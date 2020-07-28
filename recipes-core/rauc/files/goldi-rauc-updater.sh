@@ -1,14 +1,21 @@
 echo updater started at $(date)
 
+#names may be changed for final environment
+UPDATE_SERVER="http://192.168.179.24/updates"
+BOOT_FILES="bcm2835-bootfiles"
+UPDATE_INFO="update-info"
+UPDATE_FILE="update.raucb"
+RAUC_DIR="/etc/rauc"
+
 #download update-info and collect necessary information
-wget -O /etc/rauc/update-info http://192.168.179.24/updates/update-info
-NEW_VERSION=$(cat /etc/rauc/update-info | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
-NEW_BUILD=$(cat /etc/rauc/update-info | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+wget -O ${RAUC_DIR}/${UPDATE_INFO} ${UPDATE_SERVER}/${UPDATE_INFO} || { echo could not retrieve ${UPDATE_INFO} && exit 1; }
+BOOTLOADER_UPDATE=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^bootloader-update | cut -d: -f2)
+NEW_VERSION=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+NEW_BUILD=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
 BOOTED_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.version' | sed 's/"//g')
 BOOTED_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.build' | sed 's/"//g')
 INACTIVE_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.version' | sed 's/"//g')
 INACTIVE_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.build' | sed 's/"//g')
-BOOTLOADER_UPDATE=$(cat /etc/rauc/update-info | grep ^bootloader-update | cut -d: -f2)
 
 #output for log
 echo new version=$NEW_VERSION
@@ -29,15 +36,13 @@ then
 		fw_setenv BOOT_ORDER "$(fw_printenv BOOT_ORDER | cut -d= -f2 | awk '{print $2,$1}')"
 		shutdown -r 1
 	else
+		echo downloading update
+		[ "$BOOTLOADER_UPDATE" = "1" ] && wget -r -np -nH --cut-dirs=1 -R "index.html?*" -P ${RAUC_DIR} ${UPDATE_SERVER}/${BOOT_FILES}/ || { echo could not retrieve ${BOOT_FILES} && exit 1; }
+		wget -O ${RAUC_DIR}/${UPDATE_FILE} ${UPDATE_SERVER}/${UPDATE_FILE} || { echo could not retrieve ${UPDATE_FILE} && exit 1; }
 		echo installing update
-		if [ "$BOOTLOADER_UPDATE" = "1" ]
-		then
-			echo installing new bootloader
-			wget -r -np -nH --cut-dirs=1 -R "index.html?*" -P /etc/rauc http://192.168.179.24/updates/bcm2835-bootfiles/  && cp -r /etc/rauc/bcm2835-bootfiles/* /boot && rm -r /etc/rauc/bcm2835-bootfiles
-		fi
+		[ "$BOOTLOADER_UPDATE" = "1" ] && echo installing new bootloader && cp -r ${RAUC_DIR}/${BOOT_FILES}/* /boot && rm -r ${RAUC_DIR}/${BOOT_FILES}
 		echo installing new rootfs
-		wget -O /etc/rauc/update.raucb http://192.168.179.24/updates/update.raucb
-		rauc install /etc/rauc/update.raucb && rm /etc/rauc/update.raucb
+		rauc install ${RAUC_DIR}/${UPDATE_FILE} && rm ${RAUC_DIR}/${UPDATE_FILE}
 	fi
 else
 	echo no update needed
