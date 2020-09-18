@@ -14,3 +14,4 @@ IMAGE_ROOTFS_EXTRA_SPACE_append = "${@bb.utils.contains("DISTRO_FEATURES", "syst
 WKS_FILE = "sdimage-goldi.wks"
 
 IMAGE_INSTALL_append = " slotraucs"
+do_image_wic[depends] += " boot-partition-image:do_deploy"
