@@ -1,7 +1,7 @@
 echo updater started at $(date)
 
 #names may be changed for final environment
-UPDATE_SERVER="http://192.168.179.24/updates"
+UPDATE_SERVER="http://141.24.211.56/updates"
 UPDATE_INFO="update-info"
 UPDATE_FILE="update.raucb"
 RAUC_DIR="/etc/rauc"

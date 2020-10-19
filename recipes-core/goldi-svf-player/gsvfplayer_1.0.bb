@@ -1,9 +1,11 @@
 SUMMARY = "Provides the goldi-svf-player"
 HOMEPAGE = "https://github.com/lassertos/goldi-svf-player"
-SRC_URI = "http://192.168.179.24/updates/gsvfplayer-1.0.tar.gz"
+SRCREV = "${AUTOREV}"
+SRC_URI = "git://git@github.com/lassertos/goldi-svf-player.git;protocol=ssh"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
-SRC_URI[sha256sum] = "c8d7cb2d699a95ed2aaa908ade871460419c9efac435f26eed171f2a10f37459"
+SRC_URI[sha256sum] = "354ec4faf8359290f187fff0c513702747a3e2a3823a259978239e05f4e780cd"
+S = "${WORKDIR}/git"
 
 DEPENDS = "bcm2835"
 
