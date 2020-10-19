@@ -6,7 +6,7 @@ inherit deploy nopackages
 INHIBIT_DEFAULT_DEPS = "1"
 
 # Set kernel and boot loader
-IMAGE_BOOTLOADER ?= "bcm2835-bootfiles"
+IMAGE_BOOTLOADER ?= "bootfiles"
 
 # Kernel image name
 BOOTIMG_KERNELIMAGE ?= "${SDIMG_KERNELIMAGE}"
@@ -49,7 +49,7 @@ do_deploy() {
     # Create a vfat image with boot files
     rm -f ${WORKDIR}/boot.img
     mkfs.vfat -F32 -n "boot" -S 512 -C ${WORKDIR}/boot.img 40960
-    mcopy -v -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/bcm2835-bootfiles/* ::/ || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/bcm2835-bootfiles/* into boot.img"
+    mcopy -v -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/bootfiles/* ::/ || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/bootfiles/* into boot.img"
     if [ "${@bb.utils.contains("MACHINE_FEATURES", "armstub", "1", "0", d)}" = "1" ]; then
         mcopy -v -i ${WORKDIR}/boot.img -s ${DEPLOY_DIR_IMAGE}/armstubs/${ARMSTUB} ::/ || bbfatal "mcopy cannot copy ${DEPLOY_DIR_IMAGE}/armstubs/${ARMSTUB} into boot.img"
     fi

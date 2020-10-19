@@ -4,7 +4,7 @@ LICENSE = "MIT"
 
 S = "${WORKDIR}/${PN}-${PV}"
 
-RAUC_BUNDLE_BUILD = "${STARTTIME}"
+RAUC_BUNDLE_BUILD = "${COMMITNR}"
 
 do_install() {
     install -d ${D}/
