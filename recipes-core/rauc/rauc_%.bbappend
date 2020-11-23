@@ -17,4 +17,11 @@ do_install_append () {
     install -m 755 ${WORKDIR}/pre-install.sh ${D}${libdir}/rauc
     install -m 755 ${WORKDIR}/ca.cert.pem ${D}${sysconfdir}/rauc
     install -m 755 ${WORKDIR}/goldi-rauc-updater.sh ${D}${bindir}/goldi-rauc-updater.sh
+    if [ ${@d.getVar('CONTROLUNIT')} = 1 ]
+        then
+            sed -i 's/@@UNITTYPE@@/CU/' ${D}${bindir}/goldi-rauc-updater.sh
+        else
+            sed -i 's/@@UNITTYPE@@/PS/' ${D}${bindir}/goldi-rauc-updater.sh
+    fi
+    sed -i 's/@@MACHINE@@/${MACHINE}/' ${D}${bindir}/goldi-rauc-updater.sh
 }

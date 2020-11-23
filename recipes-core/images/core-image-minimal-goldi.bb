@@ -4,6 +4,9 @@ IMAGE_INSTALL = "packagegroup-core-boot ${CORE_IMAGE_EXTRA_INSTALL}"
 
 IMAGE_LINGUAS = " "
 
+IMAGE_NAME = "${@ "image-CU" if bb.utils.to_boolean(d.getVar('CONTROLUNIT')) else "image-PS" }"
+IMAGE_LINK_NAME = "${@ "image-CU-${MACHINE}" if bb.utils.to_boolean(d.getVar('CONTROLUNIT')) else "image-PS-${MACHINE}" }"
+
 LICENSE = "MIT"
 
 inherit core-image

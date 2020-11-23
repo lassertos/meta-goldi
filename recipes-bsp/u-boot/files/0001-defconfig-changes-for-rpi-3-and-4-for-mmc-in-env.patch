@@ -1,0 +1,56 @@
+From 31b06fd31a9cbef15c14e22ae27318db4cbb2c5a Mon Sep 17 00:00:00 2001
+From: Pierre Helbing <pierre.helbing@tu-ilmenau.de>
+Date: Sat, 21 Nov 2020 22:29:26 +0100
+Subject: [PATCH] defconfig changes for rpi 3 and 4 for mmc in env
+
+---
+ configs/rpi_3_32b_defconfig | 8 +++++++-
+ configs/rpi_4_32b_defconfig | 8 +++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/configs/rpi_3_32b_defconfig b/configs/rpi_3_32b_defconfig
+index b8a3d17f43..5c400e5f12 100644
+--- a/configs/rpi_3_32b_defconfig
++++ b/configs/rpi_3_32b_defconfig
+@@ -19,7 +19,6 @@ CONFIG_CMD_MMC=y
+ CONFIG_CMD_USB=y
+ CONFIG_CMD_FS_UUID=y
+ CONFIG_OF_EMBED=y
+-CONFIG_ENV_FAT_DEVICE_AND_PART="0:1"
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG=y
+ CONFIG_DM_KEYBOARD=y
+@@ -45,3 +44,10 @@ CONFIG_SYS_WHITE_ON_BLACK=y
+ CONFIG_CONSOLE_SCROLL_LINES=10
+ CONFIG_PHYS_TO_BUS=y
+ CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_ENV_IS_IN_FAT=n
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_SYS_MMC_ENV_DEV=0
++CONFIG_SYS_MMC_ENV_PART=0
++CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
++CONFIG_ENV_OFFSET=0x800000
++CONFIG_ENV_OFFSET_REDUND=0x1000000
+diff --git a/configs/rpi_4_32b_defconfig b/configs/rpi_4_32b_defconfig
+index 4a88448e9d..b2f26c54ac 100644
+--- a/configs/rpi_4_32b_defconfig
++++ b/configs/rpi_4_32b_defconfig
+@@ -19,7 +19,6 @@ CONFIG_CMD_PCI=y
+ CONFIG_CMD_USB=y
+ CONFIG_CMD_FS_UUID=y
+ CONFIG_OF_BOARD=y
+-CONFIG_ENV_FAT_DEVICE_AND_PART="0:1"
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG=y
+ CONFIG_DFU_MMC=y
+@@ -58,3 +57,10 @@ CONFIG_PHYS_TO_BUS=y
+ CONFIG_ADDR_MAP=y
+ CONFIG_SYS_NUM_ADDR_MAP=2
+ CONFIG_OF_LIBFDT_OVERLAY=y
++CONFIG_ENV_IS_IN_FAT=n
++CONFIG_ENV_IS_IN_MMC=y
++CONFIG_SYS_MMC_ENV_DEV=0
++CONFIG_SYS_MMC_ENV_PART=0
++CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
++CONFIG_ENV_OFFSET=0x800000
++CONFIG_ENV_OFFSET_REDUND=0x1000000
