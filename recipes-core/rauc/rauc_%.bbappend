@@ -24,4 +24,5 @@ do_install_append () {
             sed -i 's/@@UNITTYPE@@/PS/' ${D}${bindir}/goldi-rauc-updater.sh
     fi
     sed -i 's/@@MACHINE@@/${MACHINE}/' ${D}${bindir}/goldi-rauc-updater.sh
+    sed -i 's/@@MACHINE@@/${MACHINE}/' ${D}${sysconfdir}/rauc/system.conf
 }
