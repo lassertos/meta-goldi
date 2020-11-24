@@ -24,21 +24,27 @@ echo inactive version=$INACTIVE_VERSION
 echo inactive build=$INACTIVE_BUILD
 
 #check if update is already installed on booted partition
-if [ "$NEW_VERSION" != "$BOOTED_VERSION" ] || [ "$NEW_BUILD" != "$BOOTED_BUILD" ]
-then
+#if [ "$NEW_VERSION" != "$BOOTED_VERSION" ] || [ "$NEW_BUILD" != "$BOOTED_BUILD" ]
+#then
 	#check if update is already installed on inactive partition
-	if [ "$NEW_VERSION" = "$INACTIVE_VERSION" ] && [ "$NEW_BUILD" = "$INACTIVE_BUILD" ]
-	then
-		echo changing boot order
-		fw_setenv BOOT_ORDER "$(fw_printenv BOOT_ORDER | cut -d= -f2 | awk '{print $2,$1}')"
-		shutdown -r 1
-	else
-		echo downloading update
-		wget -O ${RAUC_DIR}/${UPDATE_FILE} ${UPDATE_SERVER}/${UPDATE_FILE} || { echo could not retrieve ${UPDATE_FILE} && exit 1; }
-		echo installing update
-		umount /boot
-		rauc install ${RAUC_DIR}/${UPDATE_FILE} && rm ${RAUC_DIR}/${UPDATE_FILE}
-	fi
-else
-	echo no update needed
-fi
+#	if [ "$NEW_VERSION" = "$INACTIVE_VERSION" ] && [ "$NEW_BUILD" = "$INACTIVE_BUILD" ]
+#	then
+#		echo changing boot order
+#		fw_setenv BOOT_ORDER "$(fw_printenv BOOT_ORDER | cut -d= -f2 | awk '{print $2,$1}')"
+#		shutdown -r 1
+#	else
+#		echo downloading update
+#		wget -O ${RAUC_DIR}/${UPDATE_FILE} ${UPDATE_SERVER}/${UPDATE_FILE} || { echo could not retrieve ${UPDATE_FILE} && exit 1; }
+#		echo installing update
+#		umount /boot
+#		rauc install ${RAUC_DIR}/${UPDATE_FILE} && rm ${RAUC_DIR}/${UPDATE_FILE}
+#	fi
+#else
+#	echo no update needed
+#fi
+
+echo downloading update
+wget -O ${RAUC_DIR}/${UPDATE_FILE} ${UPDATE_SERVER}/${UPDATE_FILE} || { echo could not retrieve ${UPDATE_FILE} && exit 1; }
+echo installing update
+umount /boot
+rauc install ${RAUC_DIR}/${UPDATE_FILE} && rm ${RAUC_DIR}/${UPDATE_FILE}
