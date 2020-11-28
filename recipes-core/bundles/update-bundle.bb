@@ -9,5 +9,8 @@ RAUC_BUNDLE_BUILD = "${COMMITNR}"
 
 RAUC_KEY_FILE = "${THISDIR}/files/ca.key.pem"
 RAUC_CERT_FILE = "${THISDIR}/files/ca.cert.pem"
+RAUC_KEYRING_FILE = "${THISDIR}/files/ca.cert.pem"
+
+RAUC_CASYNC_BUNDLE = "1"
 
 BUNDLE_NAME = "${@ "update-bundle-CU-${MACHINE}" if bb.utils.to_boolean(d.getVar('CONTROLUNIT')) else "update-bundle-PS-${MACHINE}" }"

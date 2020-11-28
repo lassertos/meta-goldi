@@ -43,8 +43,6 @@ echo inactive build=$INACTIVE_BUILD
 #	echo no update needed
 #fi
 
-echo downloading update
-wget -O ${RAUC_DIR}/${UPDATE_FILE} ${UPDATE_SERVER}/${UPDATE_FILE} || { echo could not retrieve ${UPDATE_FILE} && exit 1; }
 echo installing update
 umount /boot
-rauc install ${RAUC_DIR}/${UPDATE_FILE} && rm ${RAUC_DIR}/${UPDATE_FILE}
+rauc install "http://141.24.211.56/updates/casync-update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"
