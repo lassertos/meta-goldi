@@ -2,7 +2,7 @@ echo updater started at $(date)
 
 #names may be changed for final environment
 UPDATE_SERVER="http://141.24.211.56/updates"
-UPDATE_FILE="update-@@UNITTYPE@@-@@MACHINE@@.raucb"
+UPDATE_FILE="update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"
 RAUC_DIR="/etc/rauc"
 
 #download update-info and collect necessary information
