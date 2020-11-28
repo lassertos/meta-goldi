@@ -2,13 +2,14 @@ echo updater started at $(date)
 
 #names may be changed for final environment
 UPDATE_SERVER="http://141.24.211.56/updates"
+UPDATE_INFO="update-info-@@UNITTYPE@@-@@MACHINE@@"
 UPDATE_FILE="update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"
 RAUC_DIR="/etc/rauc"
 
 #download update-info and collect necessary information
-UPDATE_INFO=$(rauc info ${UPDATE_SERVER}/${UPDATE_FILE}) || { echo could not retrieve update info && exit 1; }
-NEW_VERSION=$(echo ${UPDATE_INFO} | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
-NEW_BUILD=$(echo ${UPDATE_INFO} | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+wget -O ${RAUC_DIR}/${UPDATE_INFO} ${UPDATE_SERVER}/${UPDATE_INFO} || { echo could not retrieve ${UPDATE_INFO} && exit 1; }
+NEW_VERSION=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+NEW_BUILD=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
 BOOTED_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.version' | sed 's/"//g')
 BOOTED_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.build' | sed 's/"//g')
 INACTIVE_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.version' | sed 's/"//g')
