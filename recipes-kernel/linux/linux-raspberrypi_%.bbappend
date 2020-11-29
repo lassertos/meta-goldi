@@ -7,6 +7,9 @@ do_configure_prepend() {
     CONF_SED_SCRIPT=""
     
     kernel_configure_variable SQUASHFS y
+    kernel_configure_variable CONFIG_MEDIA_SUPPORT y
+    kernel_configure_variable CONFIG_USB_CONFIGFS_F_UVC y
+    kernel_configure_variable CONFIG_USB_F_UVC y
 
     # Keep this the last line
     # Remove all modified configs and add the rest to .config
