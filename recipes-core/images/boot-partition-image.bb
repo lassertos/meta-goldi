@@ -26,8 +26,8 @@ do_deploy[depends] = " \
 do_deploy[recrdeps] = "do_build"
 
 # SD card vfat partition image name
-BOOTIMG_VFAT = "${IMAGE_NAME}.vfat"
-BOOTIMG_LINK_VFAT = "${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.vfat"
+BOOTIMG_VFAT = "${IMAGE_NAME}.img"
+BOOTIMG_LINK_VFAT = "${DEPLOY_DIR_IMAGE}/${IMAGE_LINK_NAME}.img"
 
 def split_overlays(d, out, ver=None):
     dts = d.getVar("KERNEL_DEVICETREE")

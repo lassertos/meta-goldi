@@ -10,10 +10,16 @@ S = "${WORKDIR}/git"
 TARGET_CFLAGS += "-O0 -g"
 EXTRA_OECONF_append = " ${@ "--enable-cu" if bb.utils.to_boolean(d.getVar('CONTROLUNIT')) else "" }"
 
-inherit autotools systemd
+inherit autotools systemd pkgconfig
 
 SYSTEMD_AUTO_ENABLE = "enable"
 SYSTEMD_SERVICE_${PN}_append = " ${@ " GOLDiCommunicationService.service GOLDiProgrammingService.socket GOLDiCommandService.socket" if bb.utils.to_boolean(d.getVar('CONTROLUNIT')) else " GOLDiCommunicationService.service GOLDiProgrammingService.socket GOLDiInitializationService.socket GOLDiWebcamService.socket GOLDiProtectionService.socket" }"
+
+do_compile() {
+	CFLAGS="${CFLAGS} `pkg-config --cflags gstreamer-1.0 gstreamer-plugins-base-1.0`"
+	LDLIBS="${LDFLAGS} `pkg-config --libs gstreamer-1.0 gstreamer-plugins-base-1.0`"
+	oe_runmake -e
+}
 
 do_install_append() {
 	install -d 0644 ${DEPLOY_DIR_IMAGE}/data
@@ -38,6 +44,6 @@ do_install_append() {
   	fi
 }
 
-DEPENDS = "bcm2835 cjson libwebsockets systemd libxsvf"
+DEPENDS = "bcm2835 cjson libwebsockets systemd libxsvf gstreamer1.0 gstreamer1.0-plugins-base"
 
 FILES_${PN} += " /data /data/GOLDiServices /data/GOLDiServices/DeviceData.json"

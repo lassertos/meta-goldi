@@ -1,27 +1,27 @@
 echo updater started at $(date)
 
 #names may be changed for final environment
-UPDATE_SERVER="http://141.24.211.56/updates"
+UPDATE_SERVER="http://192.168.179.99/updates"
 UPDATE_INFO="update-info-@@UNITTYPE@@-@@MACHINE@@"
 UPDATE_FILE="update-@@UNITTYPE@@-@@MACHINE@@.raucb"
 RAUC_DIR="/etc/rauc"
 
 #download update-info and collect necessary information
-wget -O ${RAUC_DIR}/${UPDATE_INFO} ${UPDATE_SERVER}/${UPDATE_INFO} || { echo could not retrieve ${UPDATE_INFO} && exit 1; }
-NEW_VERSION=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
-NEW_BUILD=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
-BOOTED_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.version' | sed 's/"//g')
-BOOTED_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.build' | sed 's/"//g')
-INACTIVE_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.version' | sed 's/"//g')
-INACTIVE_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.build' | sed 's/"//g')
+#wget -O ${RAUC_DIR}/${UPDATE_INFO} ${UPDATE_SERVER}/${UPDATE_INFO} || { echo could not retrieve ${UPDATE_INFO} && exit 1; }
+#NEW_VERSION=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Version: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+#NEW_BUILD=$(cat ${RAUC_DIR}/${UPDATE_INFO} | grep ^Build: | cut -d: -f2 | sed "s/'//g" | tr -d [:space:])
+#BOOTED_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.version' | sed 's/"//g')
+#BOOTED_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "booted") | .value.slot_status.bundle.build' | sed 's/"//g')
+#INACTIVE_VERSION=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.version' | sed 's/"//g')
+#INACTIVE_BUILD=$(rauc status --detailed --output-format=json | jq '.slots | .[] | to_entries[] | select(.value.state == "inactive") | .value.slot_status.bundle.build' | sed 's/"//g')
 
 #output for log
-echo new version=$NEW_VERSION
-echo new build=$NEW_BUILD
-echo booted version=$BOOTED_VERSION
-echo booted build=$BOOTED_BUILD
-echo inactive version=$INACTIVE_VERSION
-echo inactive build=$INACTIVE_BUILD
+#echo new version=$NEW_VERSION
+#echo new build=$NEW_BUILD
+#echo booted version=$BOOTED_VERSION
+#echo booted build=$BOOTED_BUILD
+#echo inactive version=$INACTIVE_VERSION
+#echo inactive build=$INACTIVE_BUILD
 
 #check if update is already installed on booted partition
 #if [ "$NEW_VERSION" != "$BOOTED_VERSION" ] || [ "$NEW_BUILD" != "$BOOTED_BUILD" ]
@@ -45,4 +45,4 @@ echo inactive build=$INACTIVE_BUILD
 
 echo installing update
 umount /boot
-rauc install "http://141.24.211.56/updates/casync-update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"
+rauc install "http://192.168.179.99/updates/casync-update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"
