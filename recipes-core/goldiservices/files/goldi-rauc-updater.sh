@@ -1,7 +1,7 @@
 echo updater started at $(date)
 
 #names may be changed for final environment
-UPDATE_SERVER="http://192.168.179.99/updates"
+UPDATE_SERVER="http://192.168.179.37/updates"
 UPDATE_INFO="update-info-@@UNITTYPE@@-@@MACHINE@@"
 UPDATE_FILE="update-@@UNITTYPE@@-@@MACHINE@@.raucb"
 RAUC_DIR="/etc/rauc"
@@ -45,4 +45,4 @@ RAUC_DIR="/etc/rauc"
 
 echo installing update
 umount /boot
-rauc install "http://192.168.179.99/updates/casync-update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"
+rauc install "${UPDATE_SERVER}/casync-update-bundle-@@UNITTYPE@@-@@MACHINE@@.raucb"

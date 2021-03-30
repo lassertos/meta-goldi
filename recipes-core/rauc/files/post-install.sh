@@ -1,2 +1,2 @@
 #!/bin/sh
-shutdown -r 1
+kill -SIGUSR1 "$(pidof GOLDiCommunicationService)"

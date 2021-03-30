@@ -1,0 +1,22 @@
+From 58c836802e469e0b600173613d3c168b02606966 Mon Sep 17 00:00:00 2001
+From: Pierre Helbing <pierre.helbing@t-online.de>
+Date: Mon, 29 Mar 2021 22:17:44 +0200
+Subject: [PATCH] mmc changes
+
+---
+ env/mmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/env/mmc.c b/env/mmc.c
+index b24c35cec9..685c59f433 100644
+--- a/env/mmc.c
++++ b/env/mmc.c
+@@ -22,6 +22,8 @@
+ #define __STR(X) #X
+ #define STR(X) __STR(X)
+ 
++#define CONFIG_SYS_MMC_ENV_DEV 0
++
+ DECLARE_GLOBAL_DATA_PTR;
+ 
+ #if CONFIG_IS_ENABLED(OF_CONTROL)

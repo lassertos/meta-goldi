@@ -1,0 +1,8 @@
+[Unit]
+Description = The GOLDi RAUC Updater Script
+
+[Service]
+ExecStart = goldi-rauc-updater.sh
+
+[Install]
+WantedBy = multi-user.target
